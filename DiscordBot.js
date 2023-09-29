@@ -1,40 +1,42 @@
 import { Client, GatewayIntentBits } from 'discord.js';
-import keys from './keys.json' assert { type: "json" };
+// import keys from './keys.json' assert { type: 'json' };
 import playerFetcher from './PlayerIdFetcher.js';
+import 'dotenv/config';
 
-const clientToken = keys.clientToken;
-const client = new Client({ intents: [ 
-  GatewayIntentBits.DirectMessages,
-  GatewayIntentBits.Guilds,
-  GatewayIntentBits.GuildMessages,
-  GatewayIntentBits.MessageContent,] });
+// const clientToken = keys.clientToken;
+const clientToken = process.env.DISCORD_CLIENT_TOKEN;
+const client = new Client({
+	intents: [
+		GatewayIntentBits.DirectMessages,
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildMessages,
+		GatewayIntentBits.MessageContent,
+	],
+});
 
 async function getPlayersInGame() {
-  const playersInGame = await playerFetcher();
-  console.log(playersInGame);
-
+	const playersInGame = await playerFetcher();
+	console.log(playersInGame);
 }
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  //change time interval to 300000
-  setInterval(getPlayersInGame, 1000);
+	console.log(`Logged in as ${client.user.tag}!`);
+	//change time interval to 300000
+	setInterval(getPlayersInGame, 5000);
 
-  //someone is in game
+	//someone is in game
 
-    //someone in game and not streaming
+	//someone in game and not streaming
 
-    //else someone in game and is already streaming
+	//else someone in game and is already streaming
 
-  //else no one is currently in game
+	//else no one is currently in game
 });
 
-
-
-client.on("messageCreate", (message) => {
-if (message.content === "ping") {
-  message.reply("Hey!")
-} 
+client.on('messageCreate', (message) => {
+	if (message.content === 'ping') {
+		message.reply('Hey!');
+	}
 });
 
 client.login(clientToken);

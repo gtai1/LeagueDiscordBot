@@ -1,3 +1,21 @@
 {
-    "lolPlayerList": ["Blowskie", "Who Fed Zed", "Cros92", "Bill Tompkins", "Asmustwar", "H4zed", "H4Z3D"]
+	"lolPlayerList": [
+		"Blowskie",
+		"Who Fed Zed",
+		"Cros92",
+		"Bill Tompkins",
+		"Asmustwar",
+		"H4zed",
+		"H4Z3D"
+	],
+	"leagueDiscordRelatedAccounts": [
+		{ "discordId": "Gayvin", "leagueName": ["Jam"] },
+		{ "discordId": "Gayvin", "leagueName": ["Blowskie"] },
+		{ "discordId": "Gayvin", "leagueName": ["Who Fed Zed"] },
+		{ "discordId": "Gayvin", "leagueName": ["Cros92"] },
+		{ "discordId": "Gayvin", "leagueName": ["Bill Tompkins"] },
+		{ "discordId": "Gayvin", "leagueName": ["Asmustwar"] },
+		{ "discordId": "Gayvin", "leagueName": ["H4zed"] },
+		{ "discordId": "Gayvin", "leagueName": ["H4Z3D"] }
+	]
 }

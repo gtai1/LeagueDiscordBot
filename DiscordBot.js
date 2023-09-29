@@ -10,18 +10,15 @@ const client = new Client({ intents: [
   GatewayIntentBits.MessageContent,] });
 
 async function getPlayersInGame() {
-  const playersInGame = playerFetcher();
-
+  const playersInGame = await playerFetcher();
+  console.log(playersInGame);
 
 }
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!`);
   //change time interval to 300000
-  setInterval(async () => {
-    const players = await getPlayersInGame()
-    console.log(players);
-  }, 1000);
+  setInterval(getPlayersInGame, 1000);
 
   //someone is in game
 

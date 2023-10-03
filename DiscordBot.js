@@ -3,8 +3,8 @@ import getPlayersInGame from './PlayerIdFetcher.js';
 import 'dotenv/config';
 
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;
-const serverId = process.env.DISCORD_JPS_SERVER_ID; // server id
-const generalChannelId = process.env.DISCORD_JPS_SERVER_GENERAL_CHANNEL_ID; // text channel id
+const serverId = process.env.DISCORD_HIDEAWAY_SERVER_ID; // server id
+const generalChannelId = process.env.DISCORD_HIDEAWAY_SERVER_LEAGUE_CHANNEL_ID; // text channel id
 
 const client = new Client({
 	intents: [
@@ -31,7 +31,7 @@ async function accusePlayers() {
 		const isStreaming = await isUserStreaming(player.discordId);
 		if (!isStreaming) {
 			channel.send({
-				content: `<@${player.discordId}> ${player.name} is in game and is not streaming...gay af`,
+				content: `<@${player.discordId}> is being a snake. ${player.name} is in game and is not streaming their league game`,
 			});
 		}
 	}
@@ -39,7 +39,7 @@ async function accusePlayers() {
 
 client.on(Events.ClientReady, async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
-	//change time interval to 300000
+	//change time interval to 300000 (5 min)
 	setInterval(accusePlayers, 300000);
 });
 

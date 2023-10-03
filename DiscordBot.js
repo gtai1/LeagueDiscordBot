@@ -28,8 +28,8 @@ async function accusePlayers() {
 	const channel = await client.channels.fetch(generalChannelId);
 
 	for (let player of playersInGame) {
-		if (!(await isUserStreaming(player.discordId))) {
-			console.log("in the !")
+		const isStreaming = await isUserStreaming(player.discordId);
+		if (!isStreaming) {
 			channel.send({
 				content: `<@${player.discordId}> ${player.name} is in game and is not streaming...gay af`,
 			});
@@ -40,7 +40,7 @@ async function accusePlayers() {
 client.on(Events.ClientReady, async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	//change time interval to 300000
-	setInterval(accusePlayers, 5000);
+	setInterval(accusePlayers, 300000);
 });
 
 client.login(clientToken);

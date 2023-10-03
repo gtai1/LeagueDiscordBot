@@ -19,12 +19,12 @@ const client = new Client({
 async function isUserStreaming(userId) {
 	const server = await client.guilds.fetch(serverId);
 	const user = await server.members.fetch(userId);
+
 	return user.voice.streaming;
 }
 
 async function accusePlayers() {
 	const playersInGame = await getPlayersInGame();
-
 	const channel = await client.channels.fetch(generalChannelId);
 
 	for (let player of playersInGame) {

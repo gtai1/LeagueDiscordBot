@@ -19,16 +19,17 @@ const client = new Client({
 async function isUserStreaming(userId) {
 	const server = await client.guilds.fetch(serverId);
 	const user = await server.members.fetch(userId);
+
 	return user.voice.streaming;
 }
 
 async function accusePlayers() {
 	const playersInGame = await getPlayersInGame();
-
 	const channel = await client.channels.fetch(generalChannelId);
 
 	for (let player of playersInGame) {
-		if (!isUserStreaming(player.discordId)) {
+		if (!(await isUserStreaming(player.discordId))) {
+			console.log("in the !")
 			channel.send({
 				content: `<@${player.discordId}> ${player.name} is in game and is not streaming...gay af`,
 			});

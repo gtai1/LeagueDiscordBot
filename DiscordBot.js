@@ -1,42 +1,45 @@
-import { Client, GatewayIntentBits } from 'discord.js';
-// import keys from './keys.json' assert { type: 'json' };
-import playerFetcher from './PlayerIdFetcher.js';
+import { Client, Events, GatewayIntentBits } from 'discord.js';
+import getPlayersInGame from './PlayerIdFetcher.js';
 import 'dotenv/config';
 
-// const clientToken = keys.clientToken;
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;
+const serverId = process.env.DISCORD_JPS_SERVER_ID; // server id
+const generalChannelId = process.env.DISCORD_JPS_SERVER_GENERAL_CHANNEL_ID; // text channel id
+
 const client = new Client({
 	intents: [
 		GatewayIntentBits.DirectMessages,
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildMessages,
 		GatewayIntentBits.MessageContent,
+		GatewayIntentBits.GuildVoiceStates,
 	],
 });
 
-async function getPlayersInGame() {
-	const playersInGame = await playerFetcher();
-	console.log(playersInGame);
+async function isUserStreaming(userId) {
+	const server = await client.guilds.fetch(serverId);
+	const user = await server.members.fetch(userId);
+	return user.voice.streaming;
 }
 
-client.on('ready', () => {
+async function accusePlayers() {
+	const playersInGame = await getPlayersInGame();
+
+	const channel = await client.channels.fetch(generalChannelId);
+
+	for (let player of playersInGame) {
+		if (!isUserStreaming(player.discordId)) {
+			channel.send({
+				content: `<@${player.discordId}> ${player.name} is in game and is not streaming...gay af`,
+			});
+		}
+	}
+}
+
+client.on(Events.ClientReady, async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 	//change time interval to 300000
-	setInterval(getPlayersInGame, 5000);
-
-	//someone is in game
-
-	//someone in game and not streaming
-
-	//else someone in game and is already streaming
-
-	//else no one is currently in game
-});
-
-client.on('messageCreate', (message) => {
-	if (message.content === 'ping') {
-		message.reply('Hey!');
-	}
+	setInterval(accusePlayers, 5000);
 });
 
 client.login(clientToken);

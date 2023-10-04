@@ -33,26 +33,42 @@ export default async function getPlayersInGame() {
 		const gameMode = t.gameMode;
 		const gameType = t.gameType;
 		const gameId = t.gameId;
-		// console.log(t);
-		// console.log('gameMode', gameMode);
-		// console.log('gameType', gameType);
-		// console.log('gameQueueConfigId', t.gameQueueConfigId);
+		const gameQueueConfigId = t.gameQueueConfigId;
+		console.log(
+			player,
+			statusCode,
+			gameMode,
+			gameType,
+			gameQueueConfigId,
+			gameId
+		);
 
-		//in game
-		if (statusCode == 200) {
-			//check for ranked game
-			if (gameMode == 'CLASSIC' && gameType == 'MATCHED_GAME') {
-				for (let x of playerAccountInfo) {
-					for (let y of x.leagueName) {
-						if (player === y) {
-							x['gameId'] = gameId;
-							playersInGame.push(x);
-						}
-					}
-				}
-			}
+		//in ranked flex or solo game
+		if (
+			statusCode == 200 &&
+			gameMode == 'CLASSIC' &&
+			gameType == 'MATCHED_GAME' &&
+			(gameQueueConfigId == 420 || gameQueueConfigId == 440)
+		) {
+			// for (let x of playerAccountInfo) {
+			// 	for (let y of x.leagueName) {
+			// 		if (player === y) {
+			// 			x['gameId'] = gameId;
+			// 			playersInGame.push(x);
+			// 		}
+			// 	}
+			// }
+
+			// console.log(player);
+			playersInGame.push(
+				playerAccountInfo.filter((x) => x.leagueName.includes(player))
+			);
+			// console.log(playersInGame);
 		}
 	}
 
+	console.log(playersInGame);
 	return playersInGame;
 }
+
+getPlayersInGame();

@@ -29,16 +29,23 @@ export default async function getPlayersInGame() {
 			`https://na1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${playerId}?api_key=${APIKey}`
 		);
 		const statusCode = playerStatusResponse.status;
-		const gameMode = playerStatusResponse.gameMode;
-		const gameType = playerStatusResponse.gameType;
+		let t = await playerStatusResponse.json();
+		const gameMode = t.gameMode;
+		const gameType = t.gameType;
+		const gameId = t.gameId;
+		// console.log(t);
+		// console.log('gameMode', gameMode);
+		// console.log('gameType', gameType);
+		// console.log('gameQueueConfigId', t.gameQueueConfigId);
 
 		//in game
 		if (statusCode == 200) {
 			//check for ranked game
-			if((gameMode == `CLASSIC`) && (gameType == `MATCHED_GAME`)) {
+			if (gameMode == 'CLASSIC' && gameType == 'MATCHED_GAME') {
 				for (let x of playerAccountInfo) {
 					for (let y of x.leagueName) {
 						if (player === y) {
+							x['gameId'] = gameId;
 							playersInGame.push(x);
 						}
 					}

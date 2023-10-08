@@ -71,4 +71,4 @@ export default async function getPlayersInGame() {
 	return playersInGame;
 }
 
-getPlayersInGame();
+// getPlayersInGame();

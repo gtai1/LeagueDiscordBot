@@ -1,5 +1,5 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
-import getPlayersInGame from './PlayerIdFetcher.js';
+import getPlayersInGame from './getPlayersInGame.js';
 import 'dotenv/config';
 
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;

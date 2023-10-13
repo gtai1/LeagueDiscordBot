@@ -11,7 +11,7 @@
 	"description": "",
 	"version": "1.0.0",
 	"scripts": {
-		"start": "node DiscordBot.js"
+		"start": "node getPlayersInGame.js"
 	},
 	"repository": {
 		"type": "git",

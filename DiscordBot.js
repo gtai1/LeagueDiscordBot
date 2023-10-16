@@ -16,43 +16,15 @@ const client = new Client({
 	],
 });
 
-// async function isUserStreaming(player) {
-// 	const server = await client.guilds.fetch(serverId);
-// 	const user = await server.members.fetch(player.discordId);
-// 	return user.voice.streaming;
-// }
-
-async function isDiscidStreaming(discordId) {
+async function isPlayerStreaming(player) {
 	const server = await client.guilds.fetch(serverId);
-	const user = await server.members.fetch(discordId);
-	return user.voice.streaming;
+	const user = await server.members.fetch(player.discordId);
+	return user.voice.streaming == true ? true : false;
 }
 
-// async function canPingUser(player) {
-// 	const server = await client.guilds.fetch(serverId);
-// 	const user = await server.members.fetch(player.discordId);
-// 	const isInVoiceChannel = user.voice.channelId != null ? true : false;
-
-// 	// only ping players who are
-// 	// IN a voice channel WHILE pingIfInVoiceChannel is true
-// 	// NOT in a voice channel WHILE pingIfInVoiceChannel is false
-// 	// if (isInVoiceChannel && player.pingIfInVoiceChannel == true) {
-// 	// 	return true;
-// 	// } else if (!isInVoiceChannel && player.pingIfInVoiceChannel == false) {
-// 	// 	return true;
-// 	// } else {
-// 	// 	return false;
-// 	// }
-// 	if (isInVoiceChannel == player.pingIfInVoiceChannel) {
-// 		return true;
-// 	}
-// 	return false;
-// }
-
-async function canPingDiscId(discordId) {
-	console.log('canPingDiscId');
+async function canPingUser(player) {
 	const server = await client.guilds.fetch(serverId);
-	const user = await server.members.fetch(discordId);
+	const user = await server.members.fetch(player.discordId);
 	const isInVoiceChannel = user.voice.channelId != null ? true : false;
 
 	// only ping players who are
@@ -60,120 +32,108 @@ async function canPingDiscId(discordId) {
 	// NOT in a voice channel WHILE pingIfInVoiceChannel is false
 	if (isInVoiceChannel && player.pingIfInVoiceChannel == true) {
 		return true;
-	} else if (!isInVoiceChannel && player.pingIfInVoiceChannel == false) {
+	} else if (player.pingIfInVoiceChannel == false) {
 		return true;
 	} else {
 		return false;
 	}
-	// if (isInVoiceChannel == player.pingIfInVoiceChannel) {
-	// 	return true;
-	// }
-	// return false;
 }
 
 //https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
 function groupBy(objectArray, property) {
 	return objectArray.reduce(function (acc, obj) {
-	  var key = obj[property];
-	  if (!acc[key]) {
-		acc[key] = [];
-	  }
-	  acc[key].push(obj);
-	  return acc;
+		var key = obj[property];
+		if (!acc[key]) {
+			acc[key] = [];
+		}
+		acc[key].push(obj);
+		return acc;
 	}, {});
-  }
-
-function getArraysDiscIds(games) {
-	const gamesDiscIds = [];
-
-	for (let game in games) {
-		const playersInGame = games[game];
-		const discIds = playersInGame.map(x => x.discordId);
-		gamesDiscIds.push(discIds);
-	}
-
-	return gamesDiscIds;
 }
 
-async function getPlayersNotStreaming(gamesDiscIds) {
-	const notStreaming = [];
-	// console.log('\ngetPlayersNotStreaming');
-	for (let game of gamesDiscIds) {
+async function getPlayersNotStreaming(games) {
+	const playersNotStreaming = [];
+	// console.log('getPlayersNotStreaming');
+	for (let game in games) {
 		let gameBeingStream = false;
-		// console.log('game', game);
-		for (let discId of game) {
-			// console.log('discId', discId);
-			const streaming = await isDiscidStreaming(discId);
-			// console.log(`\n ${discId} streaming`, streaming);
-			if (streaming == true) {
+		// console.log('games[game] =', games[game]);
+		for (let player of games[game]) {
+			// console.log('player =', player);
+			// console.log('player.discordId =', player.discordId);
+			const streaming = await isPlayerStreaming(player);
+			// console.log(`${player.discordId} streaming = `, streaming);
+			if (streaming) {
 				gameBeingStream = true;
 			}
 		}
 		if (!gameBeingStream) {
-			notStreaming.push(game);
+			// console.log(`game ${game} is not being streamed`);
+			// console.log('games[game] =', games[game]);
+			// playersNotStreaming.concat(games[game]);
+			games[game].forEach((playerI) => {
+				playersNotStreaming.push(playerI);
+			});
 		}
 	}
-	return notStreaming;
+	// console.log('playersNotStreaming =', playersNotStreaming);
+	return playersNotStreaming;
 }
 
-async function canPlayersBePinged(gamesDiscIds) {
+async function getPingablePlayers(players) {
 	const pingablePlayers = [];
 
-	console.log('\ncanPlayersBePinged');
+	console.log('canPlayersBePinged');
 
-	for (let gameDiscId of gamesDiscIds) {
-		console.log('gameDiscId', gameDiscId);
-		
-		for (let discId of gameDiscId) {
-			console.log('discId', discId);
-			const canPing = await canPingDiscId(discId);
-			console.log('canPingDiscId', canPing);
-		}
-
+	for (let player of players) {
+		// console.log('player =', player);
+		const canPing = await canPingUser(player);
+		// console.log('canPingDiscId =', canPing);
 		if (canPing == true) {
-			pingablePlayers.push(discId);
+			pingablePlayers.push(player);
 		}
-
 	}
 
 	return pingablePlayers;
 }
 
+async function messagePlayers(players) {
+	const channel = await client.channels.fetch(textChannelId);
+	for (let player of players) {
+		//ping this list of players
+		// channel.send({
+		// 	content: `<@${player.discordId}> is being a snake. ${player.name} is in game and is not streaming their league game`,
+		// });
+		console.log(
+			`<@${player.discordId}> is being a snake. ${player.name} is in game and is not streaming their league game`
+		);
+	}
+}
+
 async function accusePlayers() {
 	const playersInGame = await getPlayersInGame(); // {discordId: string, name: string, leagueNames: string[], pingIfInVoiceChannel: bool}[]
-	console.log('\nplayersInGame', playersInGame);
+	console.log('playersInGame =', playersInGame);
 
+	console.log();
 	const games = groupBy(playersInGame, 'gameId');
-	console.log('\ngroupBy', games);
-
-
-	// need to persist a list of players NOT DISC IDS!!!! DUH
-
-
-	//create arrays of disc ids based on game
-	const gamesDiscIds = getArraysDiscIds(games);
-	console.log('\ngamesDiscIds', gamesDiscIds);
+	console.log('groupBy =', games);
 
 	//check if players in game are streaming
-	//return games of players that arent streaming
-	const notStreamingPlayers = await getPlayersNotStreaming(gamesDiscIds);
-	console.log('\nnotStreamingPlayers', notStreamingPlayers);
+	console.log();
+	const playersNotStreaming = await getPlayersNotStreaming(games);
+	console.log('playersNotStreaming =', playersNotStreaming);
 
-	//check which players are pingable
-	const pingablePlayers = await canPlayersBePinged(notStreamingPlayers);
-	console.log('\npingablePlayers', pingablePlayers);
+	//check which players can be pinged
+	console.log();
+	const pingablePlayers = await getPingablePlayers(playersNotStreaming);
+	console.log('pingablePlayers =', pingablePlayers);
 
-	const channel = await client.channels.fetch(textChannelId);
-	for (let player of pingablePlayers) {
-		//ping this list of players
-		channel.send({
-			content: `<@${player.discordId}> is being a snake. ${player.name} is in game and is not streaming their league game`,
-		});
-	}
+	console.log();
+	messagePlayers(pingablePlayers);
 }
 
 client.on(Events.ClientReady, async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+	console.log();
 	//change time interval to 300000 (5 min)
 	// setInterval(accusePlayers, 300000);
 	accusePlayers();

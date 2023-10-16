@@ -34,14 +34,14 @@ export default async function getPlayersInGame() {
 		const gameType = t.gameType;
 		const gameId = t.gameId;
 		const gameQueueConfigId = t.gameQueueConfigId;
-		// console.log(
-		// 	player,
-		// 	statusCode,
-		// 	gameMode,
-		// 	gameType,
-		// 	gameQueueConfigId,
-		// 	gameId
-		// );
+		console.log(
+			player,
+			statusCode,
+			gameMode,
+			gameType,
+			gameQueueConfigId,
+			gameId
+		);
 
 		//in ranked flex or solo game
 		if (
@@ -50,12 +50,15 @@ export default async function getPlayersInGame() {
 			gameType == 'MATCHED_GAME' &&
 			(gameQueueConfigId == 420 || gameQueueConfigId == 440)
 		) {
-			let playerPLUS = playerAccountInfo.filter((x) => x.leagueName.includes(player))[0];
+			let playerPLUS = playerAccountInfo.filter((x) =>
+				x.leagueName.includes(player)
+			)[0];
 			playerPLUS['gameId'] = gameId;
 			playersInGame.push(playerPLUS);
 		}
 	}
 
 	// console.log(playersInGame);
+	console.log();
 	return playersInGame;
 }

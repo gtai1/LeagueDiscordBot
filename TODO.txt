@@ -1,3 +1,2 @@
--move everything into a league snitch function file, maybe turn it into a class and call a function
 -convert to typescript?
 -create a riot api class and add throttling

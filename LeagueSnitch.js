@@ -13,6 +13,7 @@ export default class LeagueSnitch {
 	async isPlayerStreaming(player) {
 		const server = await this.client.guilds.fetch(this.serverId);
 		const user = await server.members.fetch(player.discordId);
+
 		return user.voice.streaming == true ? true : false;
 	}
 
@@ -44,41 +45,29 @@ export default class LeagueSnitch {
 
 	async getPlayersNotStreaming(games) {
 		const playersNotStreaming = [];
-		// console.log('getPlayersNotStreaming');
+
 		for (let game in games) {
 			let gameBeingStream = false;
-			// console.log('games[game] =', games[game]);
 			for (let player of games[game]) {
-				// console.log('player =', player);
-				// console.log('player.discordId =', player.discordId);
 				const streaming = await this.isPlayerStreaming(player);
-				// console.log(`${player.discordId} streaming = `, streaming);
 				if (streaming) {
 					gameBeingStream = true;
 				}
 			}
 			if (!gameBeingStream) {
-				// console.log(`game ${game} is not being streamed`);
-				// console.log('games[game] =', games[game]);
-				// playersNotStreaming.concat(games[game]);
 				games[game].forEach((playerI) => {
 					playersNotStreaming.push(playerI);
 				});
 			}
 		}
-		// console.log('playersNotStreaming =', playersNotStreaming);
 		return playersNotStreaming;
 	}
 
 	async getPingablePlayers(players) {
 		const pingablePlayers = [];
 
-		// console.log('canPlayersBePinged');
-
 		for (let player of players) {
-			// console.log('player =', player);
 			const canPing = await this.canPingUser(player);
-			// console.log('canPingDiscId =', canPing);
 			if (canPing == true) {
 				pingablePlayers.push(player);
 			}
@@ -94,8 +83,6 @@ export default class LeagueSnitch {
 	customizedRoast(player) {
 		for (let discordId in customRoasts) {
 			if (player.discordId == discordId) {
-				// console.log('roasts =', customRoasts[discordId]);
-				// console.log('roasts.length =', customRoasts[discordId].length);
 				// get random number between 0 and length-1 inclusive
 				const i = this.getRandomInt(customRoasts[discordId].length);
 				return `<@${player.discordId}> ${player.name} is in game and is not streaming their league game...${customRoasts[discordId][i]}`;
@@ -159,8 +146,6 @@ export default class LeagueSnitch {
 			}
 		}
 
-		// console.log(playersInGame);
-		console.log();
 		return playersInGame;
 	}
 
@@ -168,9 +153,9 @@ export default class LeagueSnitch {
 		const channel = await this.client.channels.fetch(this.textChannelId);
 		for (let player of players) {
 			//ping this list of players
-			// channel.send({
-			// 	content: this.customizedRoast(player),
-			// });
+			channel.send({
+				content: this.customizedRoast(player),
+			});
 			console.log(this.customizedRoast(player));
 		}
 	}

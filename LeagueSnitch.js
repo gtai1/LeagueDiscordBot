@@ -17,7 +17,7 @@ export default class LeagueSnitch {
 		return user.voice.streaming == true ? true : false;
 	}
 
-	async canPingUser(player) {
+	async canPingPlayer(player) {
 		const server = await this.client.guilds.fetch(this.serverId);
 		const user = await server.members.fetch(player.discordId);
 		const isInVoiceChannel = user.voice.channelId != null ? true : false;
@@ -67,7 +67,7 @@ export default class LeagueSnitch {
 		const pingablePlayers = [];
 
 		for (let player of players) {
-			const canPing = await this.canPingUser(player);
+			const canPing = await this.canPingPlayer(player);
 			if (canPing == true) {
 				pingablePlayers.push(player);
 			}
@@ -80,7 +80,7 @@ export default class LeagueSnitch {
 		return Math.floor(Math.random() * max);
 	}
 
-	customizedRoast(player) {
+	getCustomizedPlayerRoast(player) {
 		for (let discordId in customRoasts) {
 			if (player.discordId == discordId) {
 				// get random number between 0 and length-1 inclusive
@@ -154,9 +154,9 @@ export default class LeagueSnitch {
 		for (let player of players) {
 			//ping this list of players
 			channel.send({
-				content: this.customizedRoast(player),
+				content: this.getCustomizedPlayerRoast(player),
 			});
-			console.log(this.customizedRoast(player));
+			console.log(this.getCustomizedPlayerRoast(player));
 		}
 	}
 

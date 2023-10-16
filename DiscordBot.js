@@ -1,6 +1,7 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import getPlayersInGame from './getPlayersInGame.js';
 import 'dotenv/config';
+import customRoasts from './customRoasts.json' assert { type: 'json' };
 
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;
 const serverId = process.env.DISCORD_JPS_SERVER_ID;
@@ -82,7 +83,7 @@ async function getPlayersNotStreaming(games) {
 async function getPingablePlayers(players) {
 	const pingablePlayers = [];
 
-	console.log('canPlayersBePinged');
+	// console.log('canPlayersBePinged');
 
 	for (let player of players) {
 		// console.log('player =', player);
@@ -96,16 +97,30 @@ async function getPingablePlayers(players) {
 	return pingablePlayers;
 }
 
+function getRandomInt(max) {
+	return Math.floor(Math.random() * max);
+}
+
+function customizedRoast(player) {
+	for (let discordId in customRoasts) {
+		if (player.discordId == discordId) {
+			// console.log('roasts =', customRoasts[discordId]);
+			// console.log('roasts.length =', customRoasts[discordId].length);
+			// get random number between 0 and length-1 inclusive
+			const i = getRandomInt(customRoasts[discordId].length);
+			return `<@${player.discordId}> ${player.name} is in game and is not streaming their league game...${customRoasts[discordId][i]}`;
+		}
+	}
+}
+
 async function messagePlayers(players) {
 	const channel = await client.channels.fetch(textChannelId);
 	for (let player of players) {
 		//ping this list of players
 		// channel.send({
-		// 	content: `<@${player.discordId}> is being a snake. ${player.name} is in game and is not streaming their league game`,
+		// 	content: customizedRoast(player),
 		// });
-		console.log(
-			`<@${player.discordId}> is being a snake. ${player.name} is in game and is not streaming their league game`
-		);
+		console.log(customizedRoast(player));
 	}
 }
 

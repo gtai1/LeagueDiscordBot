@@ -14,4 +14,5 @@ This discord bot checks to see if players are streaming their League of Legends 
 <ul>
 <li>Ryan Lubin</li>
 <li>Gavin Tai</li>
+<li>Angus Leung</li>
 </ul>

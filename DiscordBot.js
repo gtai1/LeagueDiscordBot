@@ -28,7 +28,7 @@ client.on(Events.ClientReady, async () => {
 	//change time interval to 300000 (5 min)
 
 	const leagueSnitch = new LeagueSnitch(client, serverId, textChannelId);
-	setInterval(await leagueSnitch.accusePlayers(), 300000);
+	setInterval(async () => await leagueSnitch.accusePlayers(), 300000);
 });
 
 client.login(clientToken);

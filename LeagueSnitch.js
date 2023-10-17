@@ -151,6 +151,7 @@ export default class LeagueSnitch {
 
 	async messagePlayers(players) {
 		const channel = await this.client.channels.fetch(this.textChannelId);
+
 		for (let player of players) {
 			const roastMessage = this.getCustomizedPlayerRoast(player);
 			channel.send({
@@ -162,6 +163,7 @@ export default class LeagueSnitch {
 
 	async accusePlayers() {
 		const playersInGame = await this.getPlayersInGame();
+		console.log();
 		console.log('playersInGame =', playersInGame);
 
 		console.log();

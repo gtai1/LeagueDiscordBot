@@ -162,6 +162,8 @@ export default class LeagueSnitch {
 	}
 
 	async accusePlayers() {
+		console.log(new Date(Date.now()).toString());
+		console.log();
 		const playersInGame = await this.getPlayersInGame();
 		console.log();
 		console.log('playersInGame =', playersInGame);

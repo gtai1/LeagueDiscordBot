@@ -12,6 +12,7 @@ This discord bot checks to see if players are streaming their League of Legends 
 
 ## Authors (alphabetical)
 <ul>
+<li>Angus Leung</li>
 <li>Ryan Lubin</li>
 <li>Gavin Tai</li>
 </ul>

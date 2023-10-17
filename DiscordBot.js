@@ -3,8 +3,14 @@ import 'dotenv/config';
 import LeagueSnitch from './LeagueSnitch.js';
 
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;
-const serverId = process.env.DISCORD_JPS_SERVER_ID;
-const textChannelId = process.env.DISCORD_JPS_SERVER_GENERAL_CHANNEL_ID;
+
+//testing
+// const serverId = process.env.DISCORD_JPS_SERVER_ID;
+// const textChannelId = process.env.DISCORD_JPS_SERVER_GENERAL_CHANNEL_ID;
+
+//prod
+const serverId = process.env.DISCORD_HIDEAWAY_SERVER_ID;
+const textChannelId = process.env.DISCORD_HIDEAWAY_SERVER_LEAGUE_CHANNEL_ID;
 
 const client = new Client({
 	intents: [
@@ -21,9 +27,8 @@ client.on(Events.ClientReady, async () => {
 	console.log();
 	//change time interval to 300000 (5 min)
 
-	const ls = new LeagueSnitch(client, serverId, textChannelId);
-	// setInterval(ls.accusePlayers(), 300000);
-	ls.accusePlayers();
+	const leagueSnitch = new LeagueSnitch(client, serverId, textChannelId);
+	setInterval(leagueSnitch.accusePlayers(), 300000);
 });
 
 client.login(clientToken);

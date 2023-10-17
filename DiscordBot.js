@@ -1,10 +1,16 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js';
-import getPlayersInGame from './PlayerIdFetcher.js';
 import 'dotenv/config';
+import LeagueSnitch from './LeagueSnitch.js';
 
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;
-const serverId = process.env.DISCORD_HIDEAWAY_SERVER_ID; // server id
-const generalChannelId = process.env.DISCORD_HIDEAWAY_SERVER_LEAGUE_CHANNEL_ID; // text channel id
+
+//testing
+// const serverId = process.env.DISCORD_JPS_SERVER_ID;
+// const textChannelId = process.env.DISCORD_JPS_SERVER_GENERAL_CHANNEL_ID;
+
+//prod
+const serverId = process.env.DISCORD_HIDEAWAY_SERVER_ID;
+const textChannelId = process.env.DISCORD_HIDEAWAY_SERVER_LEAGUE_CHANNEL_ID;
 
 const client = new Client({
 	intents: [
@@ -16,31 +22,13 @@ const client = new Client({
 	],
 });
 
-async function isUserStreaming(userId) {
-	const server = await client.guilds.fetch(serverId);
-	const user = await server.members.fetch(userId);
-
-	return user.voice.streaming;
-}
-
-async function accusePlayers() {
-	const playersInGame = await getPlayersInGame();
-	const channel = await client.channels.fetch(generalChannelId);
-
-	for (let player of playersInGame) {
-		const isStreaming = await isUserStreaming(player.discordId);
-		if (!isStreaming) {
-			channel.send({
-				content: `<@${player.discordId}> is being a snake. ${player.name} is in game and is not streaming their league game`,
-			});
-		}
-	}
-}
-
 client.on(Events.ClientReady, async () => {
 	console.log(`Logged in as ${client.user.tag}!`);
+	console.log();
 	//change time interval to 300000 (5 min)
-	setInterval(accusePlayers, 300000);
+
+	const leagueSnitch = new LeagueSnitch(client, serverId, textChannelId);
+	setInterval(async () => await leagueSnitch.accusePlayers(), 300000);
 });
 
 client.login(clientToken);

@@ -3,6 +3,17 @@ import accountsList from './accountsList.json' assert { type: 'json' };
 import customRoasts from './customRoasts.json' assert { type: 'json' };
 import 'dotenv/config';
 
+import * as Pino from 'pino';
+const logger = Pino.pino({
+	transport: {
+	  target: 'pino-pretty',
+	  options: {
+		colorize: true,
+		colorizeObjects: true,
+	  }
+	}
+  })
+
 export default class LeagueSnitch {
 	constructor(discordClient, discordServerId, discordTextChannelId) {
 		this.client = discordClient;
@@ -122,7 +133,7 @@ export default class LeagueSnitch {
 			const gameType = t.gameType;
 			const gameId = t.gameId;
 			const gameQueueConfigId = t.gameQueueConfigId;
-			console.log(
+			logger.info(
 				player,
 				statusCode,
 				gameMode,
@@ -157,30 +168,23 @@ export default class LeagueSnitch {
 			channel.send({
 				content: roastMessage,
 			});
-			console.log(roastMessage);
+			logger.info(roastMessage);
 		}
 	}
 
 	async accusePlayers() {
-		console.log(new Date(Date.now()).toString());
-		console.log();
 		const playersInGame = await this.getPlayersInGame();
-		console.log();
-		console.log('playersInGame =', playersInGame);
+		logger.info('playersInGame =', playersInGame);
 
-		console.log();
 		const games = this.groupBy(playersInGame, 'gameId');
-		console.log('groupBy =', games);
+		logger.info('groupBy =', games);
 
-		console.log();
 		const playersNotStreaming = await this.getPlayersNotStreaming(games);
-		console.log('playersNotStreaming =', playersNotStreaming);
+		logger.info('playersNotStreaming =', playersNotStreaming);
 
-		console.log();
 		const pingablePlayers = await this.getPingablePlayers(playersNotStreaming);
-		console.log('pingablePlayers =', pingablePlayers);
+		logger.info('pingablePlayers =', pingablePlayers);
 
-		console.log();
 		this.messagePlayers(pingablePlayers);
 	}
 }

@@ -2,6 +2,15 @@ import { Client, Events, GatewayIntentBits } from 'discord.js';
 import 'dotenv/config';
 import LeagueSnitch from './LeagueSnitch.js';
 
+import * as Pino from 'pino';
+const logger = Pino.pino({
+	transport: {
+	  target: 'pino-pretty',
+	  options: {
+		colorize: true
+	  }
+	}
+  })
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;
 
 //testing
@@ -23,8 +32,7 @@ const client = new Client({
 });
 
 client.on(Events.ClientReady, async () => {
-	console.log(`Logged in as ${client.user.tag}!`);
-	console.log();
+	logger.info(`Logged in as ${client.user.tag}!`);
 	//change time interval to 300000 (5 min)
 
 	const leagueSnitch = new LeagueSnitch(client, serverId, textChannelId);

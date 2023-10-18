@@ -8,6 +8,10 @@ This discord bot checks to see if players are streaming their League of Legends 
 <ul>
 <li>League leaderboard (slash command)</li>
 <li>thank you message if user starts streaming before next check</li>
+<li>add basic unit testing</li>
+<li>possibly start using github secrets</li>
+<li>need more custom roasts</li>
+<li>handling of edge cases in LeageuSnitch.js</li>
 </ul>
 
 ## Authors (alphabetical)

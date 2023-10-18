@@ -6,13 +6,13 @@ import 'dotenv/config';
 import * as Pino from 'pino';
 const logger = Pino.pino({
 	transport: {
-	  target: 'pino-pretty',
-	  options: {
-		colorize: true,
-		colorizeObjects: true,
-	  }
-	}
-  })
+		target: 'pino-pretty',
+		options: {
+			colorize: true,
+			colorizeObjects: true,
+		},
+	},
+});
 
 export default class LeagueSnitch {
 	constructor(discordClient, discordServerId, discordTextChannelId) {
@@ -173,7 +173,13 @@ export default class LeagueSnitch {
 	}
 
 	async accusePlayers() {
-		const playersInGame = await this.getPlayersInGame();
+		let playersInGame = [];
+		try {
+			playersInGame = await this.getPlayersInGame();
+		} catch (error) {
+			logger.info(error);
+		}
+
 		logger.info('playersInGame =', playersInGame);
 
 		const games = this.groupBy(playersInGame, 'gameId');

@@ -133,7 +133,7 @@ export default class LeagueSnitch {
 			const gameType = t.gameType;
 			const gameId = t.gameId;
 			const gameQueueConfigId = t.gameQueueConfigId;
-			logger.info(
+			console.log(
 				player,
 				statusCode,
 				gameMode,
@@ -181,6 +181,7 @@ export default class LeagueSnitch {
 		}
 
 		logger.info('playersInGame =', playersInGame);
+		console.log('playersInGame =', playersInGame);
 
 		const games = this.groupBy(playersInGame, 'gameId');
 		logger.info('groupBy =', games);

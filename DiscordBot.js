@@ -5,12 +5,12 @@ import LeagueSnitch from './LeagueSnitch.js';
 import * as Pino from 'pino';
 const logger = Pino.pino({
 	transport: {
-	  target: 'pino-pretty',
-	  options: {
-		colorize: true
-	  }
+		target: 'pino-pretty',
+		options: {
+			colorize: true
+		}
 	}
-  })
+})
 const clientToken = process.env.DISCORD_CLIENT_TOKEN;
 
 //testing
@@ -36,6 +36,7 @@ client.on(Events.ClientReady, async () => {
 	//change time interval to 300000 (5 min)
 
 	const leagueSnitch = new LeagueSnitch(client, serverId, textChannelId);
+	await leagueSnitch.accusePlayers();
 	setInterval(async () => await leagueSnitch.accusePlayers(), 300000);
 });
 

@@ -1,2 +1,0 @@
--convert to typescript?
--create a riot api class and add throttling

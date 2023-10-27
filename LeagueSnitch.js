@@ -2,17 +2,7 @@ import fetch from 'node-fetch';
 import accountsList from './accountsList.json' assert { type: 'json' };
 import customRoasts from './customRoasts.json' assert { type: 'json' };
 import 'dotenv/config';
-
-import * as Pino from 'pino';
-const logger = Pino.pino({
-	transport: {
-		target: 'pino-pretty',
-		options: {
-			colorize: true,
-			colorizeObjects: true,
-		},
-	},
-});
+import logger from './Logger.js';
 
 export default class LeagueSnitch {
 	constructor(discordClient, discordServerId, discordTextChannelId) {
@@ -133,13 +123,8 @@ export default class LeagueSnitch {
 			const gameType = t.gameType;
 			const gameId = t.gameId;
 			const gameQueueConfigId = t.gameQueueConfigId;
-			console.log(
-				player,
-				statusCode,
-				gameMode,
-				gameType,
-				gameQueueConfigId,
-				gameId
+			logger.info(
+				`${player} ${statusCode} ${gameMode} ${gameType} ${gameQueueConfigId} ${gameId}`
 			);
 
 			//in ranked flex or solo game
@@ -180,17 +165,20 @@ export default class LeagueSnitch {
 			logger.info(error);
 		}
 
-		logger.info('playersInGame =', playersInGame);
-		console.log('playersInGame =', playersInGame);
+		logger.info('playersInGame:');
+		logger.info(playersInGame);
 
 		const games = this.groupBy(playersInGame, 'gameId');
-		logger.info('groupBy =', games);
+		logger.info('groupBy:');
+		logger.info(games);
 
 		const playersNotStreaming = await this.getPlayersNotStreaming(games);
-		logger.info('playersNotStreaming =', playersNotStreaming);
+		logger.info('playersNotStreaming:');
+		logger.info(playersNotStreaming);
 
 		const pingablePlayers = await this.getPingablePlayers(playersNotStreaming);
-		logger.info('pingablePlayers =', pingablePlayers);
+		logger.info('pingablePlayers:');
+		logger.info(pingablePlayers);
 
 		this.messagePlayers(pingablePlayers);
 	}

@@ -17,10 +17,19 @@ This discord bot checks to see if players are streaming their League of Legends 
 <li>create a riot api class and add throttling</li>
 </ul>
 
+## Setup: Run on Start Up in Windows 10
+
+<ol>
+<li>Make sure run-discord-bot.bat is in main project directory.</li>
+<li>Create a shortcut to run-discord-bot.bat file.</li>
+<li>Press Start, type Run, and press Enter.</li>
+<li>In the Run window, type <code>shell:startup</code> to open the Startup folder.</li>
+<li>Once the Startup folder is open, cut and paste the .bat shortcut file into the Startup folder.</li>
+</ol>
+
 ## Authors (alphabetical)
 
 <ul>
-<li>Angus Leung</li>
 <li>Ryan Lubin</li>
 <li>Gavin Tai</li>
 </ul>

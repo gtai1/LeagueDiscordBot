@@ -192,11 +192,13 @@ export default class LeagueSnitch {
 		logger.info('playersInGamesNotPinged:');
 		logger.info(playersInGamesNotPinged);
 
-		this.messagePlayers(playersInGamesNotPinged);
+		if (playersInGamesNotPinged.length > 0) {
+			this.messagePlayers(playersInGamesNotPinged);
 
-		const pingedGameIds = playersInGamesNotPinged.map((x) => x.gameId);
-		await db.addPingedGameIds(pingedGameIds);
-		logger.info('pingedGameIds:');
-		logger.info(pingedGameIds);
+			const pingedGameIds = playersInGamesNotPinged.map((x) => x.gameId);
+			await db.addPingedGameIds(pingedGameIds);
+			logger.info('pingedGameIds:');
+			logger.info(pingedGameIds);
+		}
 	}
 }

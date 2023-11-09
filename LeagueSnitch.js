@@ -3,6 +3,7 @@ import accountsList from './accountsList.json' assert { type: 'json' };
 import customRoasts from './customRoasts.json' assert { type: 'json' };
 import 'dotenv/config';
 import logger from './Logger.js';
+import Database from './Database.js';
 
 export default class LeagueSnitch {
 	constructor(discordClient, discordServerId, discordTextChannelId) {
@@ -180,6 +181,24 @@ export default class LeagueSnitch {
 		logger.info('pingablePlayers:');
 		logger.info(pingablePlayers);
 
-		this.messagePlayers(pingablePlayers);
+		const db = new Database();
+		const alreadyPingedGameIds = await db.getPingedGameIds();
+		logger.info('alreadyPingedGameIds:');
+		logger.info(alreadyPingedGameIds);
+
+		const playersInGamesNotPinged = pingablePlayers.filter(
+			(x) => !alreadyPingedGameIds.includes(x.gameId)
+		);
+		logger.info('playersInGamesNotPinged:');
+		logger.info(playersInGamesNotPinged);
+
+		if (playersInGamesNotPinged.length > 0) {
+			this.messagePlayers(playersInGamesNotPinged);
+
+			const pingedGameIds = playersInGamesNotPinged.map((x) => x.gameId);
+			await db.addPingedGameIds(pingedGameIds);
+			logger.info('pingedGameIds:');
+			logger.info(pingedGameIds);
+		}
 	}
 }

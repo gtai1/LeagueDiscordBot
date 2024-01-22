@@ -132,7 +132,7 @@ export default class LeagueSnitch {
 			if (
 				statusCode == 200 &&
 				gameMode == 'CLASSIC' &&
-				gameType == 'MATCHED_GAME' &&
+				gameType == 'MATCHED' &&
 				(gameQueueConfigId == 420 || gameQueueConfigId == 440)
 			) {
 				let playerPLUS = playerAccountInfo.filter((x) =>

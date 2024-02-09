@@ -7,6 +7,7 @@ export default Pino.pino({
 			colorize: true,
 			ignore: 'pid,hostname',
 			translateTime: 'SYS:standard',
+			destination: 'logs.log',
 		},
 	},
 });

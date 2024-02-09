@@ -28,7 +28,8 @@ client.on(Events.ClientReady, async () => {
 
 	const leagueSnitch = new LeagueSnitch(client, serverId, textChannelId);
 	await leagueSnitch.accusePlayers();
-	setInterval(async () => await leagueSnitch.accusePlayers(), 300000);
+	// setInterval(async () => await leagueSnitch.accusePlayers(), 300000);
+	client.destroy();
 });
 
 client.login(clientToken);

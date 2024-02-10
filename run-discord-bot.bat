@@ -1,10 +1,7 @@
-@REM set PWD=%~dp0
-@REM echo %PWD%
-cd %PWD%
-cd ../LeagueDiscordBotFiles
+cd C:\\Users\\Ryan\\Documents\\Software\\LeagueDiscordSnitch\\LeagueDiscordBotFiles
 git pull
-copy /y ".env" "..\\LeagueDiscordBot\\\.env"
-copy /y accountsList.json ..\\LeagueDiscordBot\\accountsList.json
-copy /y customRoasts.json ..\\LeagueDiscordBot\\customRoasts.json
-cd ../LeagueDiscordBot
+copy /y ".env" "C:\\Users\\Ryan\\Documents\\Software\\LeagueDiscordSnitch\\LeagueDiscordBot\\\.env"
+copy /y accountsList.json C:\\Users\\Ryan\\Documents\\Software\\LeagueDiscordSnitch\\LeagueDiscordBot\\accountsList.json
+copy /y customRoasts.json C:\\Users\\Ryan\\Documents\\Software\\LeagueDiscordSnitch\\LeagueDiscordBot\\customRoasts.json
+cd C:\\Users\\Ryan\\Documents\\Software\\LeagueDiscordSnitch\\LeagueDiscordBot
 call npm start

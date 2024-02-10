@@ -20,6 +20,10 @@ We use [LeagueDiscordBotFiles](https://github.com/gtai1/LeagueDiscordBotFiles) r
 ![Windows Task Scheduler Conditions Tab](WindowsTaskScheduler/conditions.PNG)
 ![Windows Task Scheduler Settings Tab](WindowsTaskScheduler/settings.PNG)
 
+## Batch File Refactor
+
+Edit all the locations in run-discord-bot.bat to the absolute paths on your pc.
+
 ~~## Setup: Run on Start Up in Windows 10~~
 
 ~~<ol>~~

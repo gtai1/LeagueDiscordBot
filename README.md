@@ -24,16 +24,6 @@ We use [LeagueDiscordBotFiles](https://github.com/gtai1/LeagueDiscordBotFiles) r
 
 Edit all the locations in run-discord-bot.bat to the absolute paths on your pc.
 
-~~## Setup: Run on Start Up in Windows 10~~
-
-~~<ol>~~
-~~<li>Make sure run-discord-bot.bat is in main project directory.</li>~~
-~~<li>Create a shortcut to run-discord-bot.bat file.</li>~~
-~~<li>Press Start, type Run, and press Enter.</li>~~
-~~<li>In the Run window, type <code>shell:startup</code> to open the Startup folder.</li>~~
-~~<li>Once the Startup folder is open, cut and paste the .bat shortcut file into the Startup folder.</li>~~
-~~</ol>~~
-
 ## Future Features To Look Out For
 
 <ul>

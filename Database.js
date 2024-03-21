@@ -33,4 +33,8 @@ export default class Database {
 			});
 		});
 	}
+
+	async isGamePinged(gameId) {
+		//return bool whether gameId is in table
+	}
 }

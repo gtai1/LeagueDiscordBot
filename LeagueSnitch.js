@@ -158,6 +158,69 @@ export default class LeagueSnitch {
 		}
 	}
 
+	async isHazed(player) {
+		const hazed = accountsList.filter((account) => account.name == 'Dom');
+		if (hazed.leagueName.includes(player.leagueName[0])) {
+			return true;
+		}
+		return false;
+	}
+
+	async callOutPlayerStats(player) {
+		//link doms op.gg and tell stats
+		//then talk about how hes feeding or is going to feed
+		//or link clips of him failing
+		console.log('\n\n\ncallOutPlayerStats()');
+		logger.info('\n\n\ncallOutPlayerStats()');
+
+		const playerIdResponse = await fetch(
+			`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${player}?api_key=${APIKey}`
+		);
+		const summonerInfo = await playerIdResponse.text();
+		const playerId = JSON.parse(summonerInfo).puuid;
+		console.log('playerIdResponse');
+		console.log(playerIdResponse);
+		logger.info('playerIdResponse');
+		logger.info(playerIdResponse);
+
+		// const playerStatusResponse = await fetch(
+		// 	`https://na1.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/${playerId}?api_key=${APIKey}`
+		// );
+
+		// const matchId = JSON.parse(playerStatusResponse).gameId;
+
+		const lastMatchesResponse = await fetch(
+			`https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/${playerId}/ids?start=0&count=20&api_key=${APIKey}`
+		);
+		const lastMatches = await playerIdResponse.text();
+		console.log('lastMatches');
+		console.log(lastMatches);
+		console.log('lastMatche[0]');
+		console.log(lastMatches[0]);
+		logger.info('lastMatches');
+		logger.info(lastMatches);
+		logger.info('lastMatches[0]');
+		logger.info(lastMatches[0]);
+
+		const lastMatchResponse = await fetch(
+			`https://americas.api.riotgames.com/lol/match/v5/matches/${lastMatches[0]}?api_key=${APIKey}`
+		);
+		const lastMatch = await lastMatchResponse.text();
+		console.log('lastMatch');
+		console.log(lastMatch);
+		logger.info('lastMatch');
+		logger.info(lastMatch);
+
+		logger.info('\n\n\n');
+		console.log('\n\n\n');
+	}
+
+	async isGamePinged(player) {
+		//check if gameId in db
+	}
+
+	async getActiveGame(player) {}
+
 	async accusePlayers() {
 		let playersInGame = [];
 		try {
@@ -168,6 +231,15 @@ export default class LeagueSnitch {
 
 		logger.info('playersInGame:');
 		logger.info(playersInGame);
+
+		//here look through playersInGame and ping dom if in game
+		//check if game in game ids, if yes ping it with data
+		for (const player of playersInGame) {
+			// 	if (this.isHazed(player) && this.isGamePinged(player)) {
+			this.callOutPlayerStats(player);
+			// 		break;
+			// 	}
+		}
 
 		const games = this.groupBy(playersInGame, 'gameId');
 		logger.info('groupBy:');

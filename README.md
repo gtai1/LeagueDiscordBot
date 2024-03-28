@@ -6,7 +6,7 @@ This discord bot checks to see if players are streaming their League of Legends 
 
 ## File Structure Setup
 
-We use [LeagueDiscordBotFiles](https://github.com/gtai1/LeagueDiscordBotFiles) repository to store environment variables, custom roasts, and account associations.
+We use [LeagueDiscordBotFiles](https://github.com/rlubin/LeagueDiscordBotFiles) repository to store environment variables, custom roasts, and account associations.
 
     ── LeagueDiscordSnitch
      ├── LeagueDiscordBot
